@@ -76,3 +76,11 @@ type Chainable<T = {}> = {
 
 // last of array
 type LastOfArray<T> = T extends [...any, infer R] ? R : never;
+
+// Pop
+type Pop<T extends any[]> = T extends [...infer P, unknown] ? P : never;
+
+// PromiseAll
+declare function PromiseAll<T extends readonly any[]>([...T]): Promise<{
+  [K in keyof T]: T[K] extends Promise<infer P> ? P : T[K];
+}>;
