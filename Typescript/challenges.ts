@@ -84,3 +84,58 @@ type Pop<T extends any[]> = T extends [...infer P, unknown] ? P : never;
 declare function PromiseAll<T extends readonly any[]>([...T]): Promise<{
   [K in keyof T]: T[K] extends Promise<infer P> ? P : T[K];
 }>;
+
+// LookUp
+type LookUp<T, U> = T extends Record<'type', string> ? (T['type'] extends U ? T : never) : never;
+
+// Trimleft
+type space = ' ' | '\n' | '\t';
+type TrimLeft<T extends string> = T extends `${space}${infer P}` ? TrimLeft<P> : T;
+
+//Trim
+type Trim<T> = T extends `${space} ${infer R}` ? Trim<R> : T extends `${infer L}${space}` ? Trim<L> : T;
+
+// Capitalize
+type MyCapitalize<T extends string> = T extends `${infer F}${infer P}` ? `${Uppercase<F>}${P}` : T;
+
+// Replace
+type Replace<T extends string, K extends string, V extends string> = T extends `${infer F}${K}${infer O}` ? `${F}${V}${O}` : T;
+
+// Replace any
+
+type ReplaceAll<T extends string, K extends string, V extends string> = T extends `${infer F}${K}${infer P}` ? Replace<`${F}${V}${P}`, K, V> : T;
+
+// append arguments
+type AppendArguments<T, U> = T extends (...args: any) => infer P ? (...args: [...Parameters<T>, U]) => P : never ;
+
+// Permutation
+type Permutation<T, U = T> = [T] extends [never] ? [] : T extends T ? [T, ...[Exclude<U, T>]] : never;
+
+// LengthofString
+
+type LengthOfString <T extends string, R extends readonly any[] = []> = T extends `${infer F}${infer P}` ? LengthOfString<P, [...R, F]> : R['length'];
+
+// append object
+type AppendObject<T extends Record<any, any>, K extends string, V> = Pick<{[P in K]: V} & T, K | keyof T>
+
+// absolute
+type Absolute<T extends number> = T extends `${infer F}${infer Rest}` ? F extends '-' ? Rest : `${T}` : never;
+
+// string to union
+type StringToUnion<T> = T extends `${infer F}${infer Rest}` ? F | StringToUnion<Rest> : never;
+
+// merge
+type ObjectFor<T extends Record<any, any>> = {
+  [K in keyof T]: T[K]
+}
+
+type merge<T extends Record<any, any>, P extends Record<any, any>> = ObjectFor<{
+  [K in Exclude<keyof P, keyof T>]: P[K]
+} & T>
+
+// CameCase
+
+type CameCase<T extends string> = T extends `${infer F}${infer Rest}` ? F extends '-' ? CameCase<Capitalize<Rest>> : `${F}${CameCase<Rest>}` : T;
+
+// KebabCase
+type KebabCase<T extends string, First = true> = First extends true ? KebabCase<Uncapitalize<T>, false> : T extends `${infer F}${infer Rest}` ? F extends Lowercase<F> ? `${F}${KebabCase<Rest, false>}` : `-${Lowercase<F>}${KebabCase<Rest, false>}`
