@@ -33,11 +33,20 @@ function insertAtHtml(html, skeleton, idx) {
 // 插件本质 - 调用对象apply
 /**
  *  基础流程
- *  初始化配置
+ *  初始化配置 (从配置文件和shell语句中读取与合并参数)
  *  结合配置生成compiler对象
  *  加载内置插件
  *  入口初始化构建
  *  编译（构建module子类 --> 解析转译module 内容 --> 解析为AST --> 遍历完成调用模块处理 --> 处理...）
+ *  编译: 
+ *  run: 开始编译
+ *  make: 从entry开始递归的分析依赖，对每个依赖模块进行build
+ *  before-resolve: 对模块位置进行解析
+ *  build-module: 开始构建某个模块
+ *  loader: 将loader加载完成的module进行编译，生成AST树
+ *  progrom: 遍历AST,当遇到 require等一些调用表达式时，搜集依赖
+ *  seal: 所有依赖build完成，开始优化
+ *  emit: 输出dist目录
  */
 Skeleton.prototype.apply = function apply (compiler) {
   console.log('____________ 自定义 hook 开始执行：');
