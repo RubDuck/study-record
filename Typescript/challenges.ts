@@ -138,4 +138,8 @@ type merge<T extends Record<any, any>, P extends Record<any, any>> = ObjectFor<{
 type CameCase<T extends string> = T extends `${infer F}${infer Rest}` ? F extends '-' ? CameCase<Capitalize<Rest>> : `${F}${CameCase<Rest>}` : T;
 
 // KebabCase
-type KebabCase<T extends string, First = true> = First extends true ? KebabCase<Uncapitalize<T>, false> : T extends `${infer F}${infer Rest}` ? F extends Lowercase<F> ? `${F}${KebabCase<Rest, false>}` : `-${Lowercase<F>}${KebabCase<Rest, false>}`
+type KebabCase<T extends string, First = true> = First extends true ? KebabCase<Uncapitalize<T>, false> : T extends `${infer F}${infer Rest}` ? F extends Lowercase<F> ? `${F}${KebabCase<Rest, false>}` : `-${Lowercase<F>}${KebabCase<Rest, false>}` : T;
+
+// AnyOf
+type TypeEmpty = 0 | '' | false | [] | {[key: string]: never}
+type AnyOf<T extends any[]> = T extends [infer F, ...infer Rest] ? F extends TypeEmpty ? AnyOf<Rest> : true : false;
