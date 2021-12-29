@@ -1,0 +1,15 @@
+{
+  "name": "git",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://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@github.com/RubDuck/study-record.git",
+  "author": "hcl <huangchangling@yolanda.hk>",
+  "license": "MIT",
+  "devDependencies": {
+    "lint-staged": "^12.1.4",
+    "yorkie": "^2.0.0"
+  },
+  "gitHooks": {
+    "commit-msg": "node node/gitHooks.js"
+  }
+}
